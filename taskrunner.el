@@ -818,6 +818,8 @@ from the build cache."
            (setq command (concat "npx" " " taskrunner-program " " task-name)))
           ((string-equal "dobi" taskrunner-program)
            (setq command (concat taskrunner-dobi-bin-name " " task-name)))
+          ((string-equal "gradle" taskrunner-program)
+           (setq command (concat taskrunner-gradle-bin-name " " task-name)))
           (t
            (setq command (concat taskrunner-program " " task-name))))
 

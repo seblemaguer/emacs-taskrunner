@@ -13,6 +13,11 @@
 
 ;;;; Variables
 
+(defcustom taskrunner-gradle-bin-name "./gradlew"
+  "Path to the GRADLE binary."
+  :type 'string
+  :group 'taskrunner)
+
 (defcustom taskrunner-gradle-heading-regexps
   '("Build tasks\n-+\n"
     "Help tasks\n-+\n"
@@ -68,9 +73,10 @@
   "Retrieve the gradle tasks for the project in directory DIR.
 This function returns a list of the form:
 \(\"GRADLE TASK1\" \"GRADLE TASK2\"...)"
-  (let ((default-directory dir)
-        (gradle-tasks '()))
-    (call-process "gradle"  nil (taskrunner--make-task-buff-name "gradle")  nil "tasks")
+  (let* ((default-directory dir)
+         (gradle-tasks '())
+         (gradle-path (file-truename taskrunner-gradle-bin-name)))
+    (call-process gradle-path nil (taskrunner--make-task-buff-name "gradle")  nil "tasks")
     (with-temp-buffer
       (set-buffer (taskrunner--make-task-buff-name "gradle"))
       (dolist (curr-regex taskrunner-gradle-heading-regexps)
